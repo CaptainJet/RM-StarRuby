@@ -21,7 +21,7 @@ module Graphics
   def update
     #draw
     self.starruby.update_screen
-    self.framerate += 1
+    self.frame_count += 1
     self.starruby.wait
   end
   

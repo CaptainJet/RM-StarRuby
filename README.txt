@@ -1,6 +1,7 @@
 RM-StarRuby
 
 Will add details later.
+Can only use PNG and OGG.
 
 Uses:
 
