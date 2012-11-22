@@ -7,7 +7,7 @@ module Audio
   
   def bgm_play(filename, volume = 100, pitch = 100, pos = 0)
     bgm_stop
-    StarRuby::Audio.play_bgm(filename, :loop => true, :volume = volume, :position => pos)
+    StarRuby::Audio.play_bgm(filename, :loop => true, :volume => volume, :position => pos)
   end
   
   def bgm_stop

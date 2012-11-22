@@ -4,7 +4,7 @@ Sprite
 Tilemap
 Window
 
-Audio
+Audio - bgs/me functions
 Graphics - transition, frame_reset, play_movie, resize_screen, update
 
 Object - msgbox, msgbox_p
