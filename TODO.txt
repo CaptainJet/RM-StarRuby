@@ -1,10 +1,10 @@
 Bitmap - gradient_fill_rect, blur, radial_blur
 Plane
-Sprite
+Sprite - update (wave phase), <color blendings>
 Tilemap
 Window
 
 Audio - bgs/me functions
-Graphics - transition, frame_reset, play_movie, resize_screen, update
+Graphics - transition, frame_reset, play_movie, update (drawing)
 
 Object - msgbox, msgbox_p

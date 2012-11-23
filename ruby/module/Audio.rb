@@ -48,6 +48,6 @@ module Audio
   end
   
   def se_stop
-    StarRuby::Aduio.stop_all_ses
+    StarRuby::Audio.stop_all_ses
   end
 end

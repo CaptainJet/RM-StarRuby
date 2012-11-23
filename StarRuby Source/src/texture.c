@@ -310,7 +310,7 @@ Texture_s_load(int argc, VALUE* argv, VALUE self)
   Texture* texture;
   Data_Get_Struct(rbTexture, Texture, texture);
 
-  if (bitDepth == 16) {
+  if (bitDepth == 16) { //png_infop
     png_set_strip_16(pngPtr);
   }
   if (colorType == PNG_COLOR_TYPE_PALETTE && !hasPalette) {
@@ -323,22 +323,39 @@ Texture_s_load(int argc, VALUE* argv, VALUE self)
     png_set_packing(pngPtr);
   }
   if (colorType == PNG_COLOR_TYPE_GRAY && bitDepth < 8) {
-    png_set_gray_1_2_4_to_8(pngPtr);
+    png_set_expand_gray_1_2_4_to_8(pngPtr);
   }
+
   png_read_update_info(pngPtr, infoPtr);
-  if (0 < infoPtr->num_palette && hasPalette) {
+
+  png_colorp cppalette;
+  int num_palette;
+
+  png_get_PLTE(pngPtr, infoPtr, &cppalette,
+                     &num_palette);
+
+  if (0 < (num_palette) && hasPalette) {
     texture->indexes = ALLOC_N(uint8_t, width * height);
-    const png_colorp palette = infoPtr->palette;
-    const int numTrans = infoPtr->num_trans;
-#if PNG_LIBPNG_VER_SONUM <= 12
-    const png_bytep trans = infoPtr->trans;
-#else
-    const png_bytep trans = infoPtr->trans_alpha;
-#endif
-    texture->paletteSize = infoPtr->num_palette;
+
+    int numTrans;
+    png_colorp trans_color;
+    png_bytep trans;
+
+    png_get_tRNS(pngPtr, infoPtr, &trans, &numTrans, &trans_color);
+
+    //const int numTrans = infoPtr->num_trans;
+//#if PNG_LIBPNG_VER_SONUM <= 12
+//    const png_bytep trans = infoPtr->trans;
+//#else
+//    const png_bytep trans = infoPtr->trans_alpha;
+//#endif
+
+    texture->paletteSize = num_palette;
+
     Color* p = texture->palette = ALLOC_N(Color, texture->paletteSize);
+
     for (int i = 0; i < texture->paletteSize; i++, p++) {
-      const png_colorp pngColorP = &(palette[i]);
+      const png_colorp pngColorP = &(cppalette[i]);
       p->red   = pngColorP->red;
       p->green = pngColorP->green;
       p->blue  = pngColorP->blue;
@@ -351,6 +368,7 @@ Texture_s_load(int argc, VALUE* argv, VALUE self)
       }
     }
   }
+
   const int channels = png_get_channels(pngPtr, infoPtr);
   const Color* palette = texture->palette;
   uint8_t* indexes = texture->indexes;

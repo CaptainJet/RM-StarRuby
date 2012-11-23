@@ -27,7 +27,7 @@ module Input
     Graphics.starruby.update_state
     @old_keys = @current_keys || []
     @current_keys = StarRuby::Input.keys(:keyboard)
-    @repeat_keys = StarRuby::Input.keys(:keyboard, :delay => 5)
+    @repeat_keys = StarRuby::Input.keys(:keyboard, :delay => 5, :duration => 1, :interval => 5)
   end
   
   def trigger?(key)

@@ -6,7 +6,7 @@ Can only use PNG and OGG.
 Uses:
 
 - zlib
-- starruby (http://www.starruby.info/en/)
+- starruby (http://www.starruby.info/en/, http://github.com/hajimehoshi/starruby)
 
 Extra Credits:
 

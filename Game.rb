@@ -26,10 +26,9 @@ module StarRuby
   end
 end
 
-if __FILE__ == $0
-  StarRuby::Game.run(StarRuby::CONFIG[:Width], StarRuby::CONFIG[:Height], :cursor => StarRuby::CONFIG[:Cursor], :fps => StarRuby::CONFIG[:Framerate], :title => StarRuby::CONFIG[:Title], :fullscreen => StarRuby::CONFIG[:Fullscreen]) do |game|
-    Graphics.starruby = game
-    Graphics.frame_rate = StarRuby::CONFIG[:Framerate]
-    Graphics.frame_count= 0
-  end
-end
+f = StarRuby::Game.new(StarRuby::CONFIG[:Width], StarRuby::CONFIG[:Height], :cursor => StarRuby::CONFIG[:Cursor])
+f.fps =  StarRuby::CONFIG[:Framerate]
+f.fullscreen = StarRuby::CONFIG[:Fullscreen]
+f.title = StarRuby::CONFIG[:Title]
+Graphics.init(f)
+loop { Input.update; Graphics.update }

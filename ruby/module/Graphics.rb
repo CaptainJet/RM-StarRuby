@@ -7,6 +7,7 @@ module Graphics
     
     def frame_rate=(int)
       @frame_rate = [[120, int].min, 10].max
+      @starruby.fps = @frame_rate
     end
     
     def brightness=(int)
@@ -18,11 +19,22 @@ module Graphics
   
   module_function
   
+  def init(window)
+    @frame_count = 0
+    @starruby = window
+    @frame_rate = @starruby.fps
+  end
+  
   def update
     #draw
-    self.starruby.update_screen
-    self.frame_count += 1
-    self.starruby.wait
+    if @starruby.window_closing?
+      @starruby.dispose
+      exit
+      return
+    end
+    @starruby.update_screen
+    @frame_count += 1
+    @starruby.wait
   end
   
   def wait(duration)
@@ -32,19 +44,19 @@ module Graphics
   def fadeout(duration)
     rate = @brightness / duration.to_f
     until @brightness <= 0
-      self.brightness -= rate
+      @brightness -= rate
       update
     end
-    self.brightness = 0
+    @brightness = 0
   end
   
   def fadein(duration)
     rate = 255 / duration.to_f
     until @brightness >= 255
-      self.brightness += rate
+      @brightness += rate
       update
     end
-    self.brightness = 255
+    @brightness = 255
   end
   
   def freeze
@@ -57,7 +69,7 @@ module Graphics
   
   def snap_to_bitmap
     f = Bitmap.new(1, 1)
-    f.texture = self.starruby.screen.dup
+    f.texture = @starruby.screen.dup
     f
   end
   
@@ -65,20 +77,31 @@ module Graphics
   end
   
   def width
-    self.starruby.width
+    @starruby.width
   end
   
   def height
-    self.starruby.height
+    @starruby.height
   end
   
   def resize_screen(width, height)
+    full = @starruby.fullscreen?
+    @starruby.dispose
+    f = StarRuby::Game.new(width, height, :cursor => StarRuby::CONFIG[:Cursor])
+    f.fps =  @frame_rate
+    f.fullscreen = full
+    f.title = StarRuby::CONFIG[:Title]
+    @starruby = f
   end
   
   def play_movie(filename)
   end
   
   # NEW
+  
+  def set_fullscreen(bool)
+    @starruby.fullscreen = bool
+  end
   
   def add_sprite(sprite)
     @@sprites << sprite
