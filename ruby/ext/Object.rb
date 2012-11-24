@@ -5,6 +5,7 @@ class Object
       begin
         block.call
       rescue RGSSReset
+        Graphics._reset
         retry
       end
     }

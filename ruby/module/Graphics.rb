@@ -19,10 +19,10 @@ module Graphics
   
   module_function
   
-  def init(window)
+  def _reset
     @frame_count = 0
-    @starruby = window
-    @frame_rate = @starruby.fps
+    @@sprites.each {|a| a.bitmap.dispose; a.dispose }
+    @@sprites.clear
   end
   
   def update
@@ -105,9 +105,30 @@ module Graphics
   
   def add_sprite(sprite)
     @@sprites << sprite
+    resort_sprite_z
   end
   
   def remove_sprite(sprite)
     @@sprites.delete(sprite)
+  end
+  
+  def resort_sprite_z
+    @@sprites.sort! do |a, b|
+      if !a.viewport.nil?
+        if !b.viewport.nil?
+          if a.viewport.z == b.viewport.z
+            a.z <=> b.z
+          else
+            a.viewport.z <=> b.viewport.z
+          end
+        else
+          a.viewport.z <=> b.z
+        end
+      elsif !b.viewport.nil?
+        a.z <=> b.viewport.z
+      else
+        a.z <=> b.z
+      end
+    end
   end
 end

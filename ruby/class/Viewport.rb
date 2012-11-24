@@ -1,6 +1,7 @@
 class Viewport
   
-  attr_accessor :color, :tone, :rect, :visible, :z, :ox, :oy
+  attr_reader :z
+  attr_accessor :color, :tone, :rect, :visible, :ox, :oy
   
   def initialize(*args)
     case args.size
@@ -39,5 +40,10 @@ class Viewport
   def update
     @flash_duration = [@flash_duration - 1, 0].max
     @flash_color = nil if @flash_duration == 0
+  end
+  
+  def z=(z)
+    @z = z
+    Graphics.resort_sprite_z
   end
 end

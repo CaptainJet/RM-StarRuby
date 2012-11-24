@@ -37,7 +37,7 @@ class Font
   
   def first_existant_name
     if @name.is_a?(Array)
-      @name.each {|a| return a if Font.exist?(a) }
+      @name.each do |a| return a if Font.exist?(a) end
     else
       return @name if Font.exist?(@name)
     end

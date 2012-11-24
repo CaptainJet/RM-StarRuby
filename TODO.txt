@@ -1,4 +1,4 @@
-Bitmap - gradient_fill_rect, blur, radial_blur
+Bitmap - blur, radial_blur
 Plane
 Sprite - update (wave phase), <color blendings>
 Tilemap

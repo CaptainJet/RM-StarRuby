@@ -31,21 +31,21 @@ module Input
   end
   
   def trigger?(key)
-    self.const_get(key).each {|a|
+    (key.is_a?(Array) ? key : self.const_get(key)).each {|a|
       return true if @current_keys.include?(a) && !@old_keys.include?(a)
     }
     return false
   end
   
   def press?(key)
-    self.const_get(key).each {|a|
+   (key.is_a?(Array) ? key : self.const_get(key)).each {|a|
       return true if @current_keys.include?(a)
     }
     return false
   end
   
   def repeat?(key)
-    self.const_get(key).each {|a|
+    (key.is_a?(Array) ? key : self.const_get(key)).each {|a|
       return true if @repeat_keys.include?(a)
     }
     return false

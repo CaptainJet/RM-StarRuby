@@ -1,8 +1,8 @@
 class Sprite
   
-  attr_reader :opacity, :bush_opacity
-  attr_accessor :x, :y, :z, :ox, :oy, :zoom_x, :zoom_y
-  attr_accessor :src_rect, :bitmap, :viewport, :visible
+  attr_reader :opacity, :bush_opacity, :z, :viewport
+  attr_accessor :x, :y, :ox, :oy, :zoom_x, :zoom_y
+  attr_accessor :src_rect, :bitmap, :visible
   attr_accessor :wave_amp, :wave_length, :wave_speed, :wave_phase
   attr_accessor :angle, :mirror, :color, :tone, :blend_type
   attr_accessor :bush_depth
@@ -71,5 +71,15 @@ class Sprite
   def bitmap=(bitmap)
     @bitmap = bitmap
     @src_rect = Rect.new(0, 0, bitmap.width, bitmap.height)
+  end
+  
+  def viewport=(viewport)
+    @viewport = viewport
+    Graphics.resort_sprite_z
+  end
+  
+  def z=(z)
+    @z = z
+    Graphics.resort_sprite_z
   end
 end

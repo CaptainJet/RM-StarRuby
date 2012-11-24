@@ -30,5 +30,11 @@ f = StarRuby::Game.new(StarRuby::CONFIG[:Width], StarRuby::CONFIG[:Height], :cur
 f.fps =  StarRuby::CONFIG[:Framerate]
 f.fullscreen = StarRuby::CONFIG[:Fullscreen]
 f.title = StarRuby::CONFIG[:Title]
-Graphics.init(f)
+Graphics.starruby = f
+Graphics._reset
+
+$RGSS_SCRIPTS = load_data("Data/Scripts.rvdata2")
+#~ $RGSS_SCRIPTS.each {|a|
+  #~ eval(Zlib::Inflate.inflate(a[2]))
+#~ }
 loop { Input.update; Graphics.update }
