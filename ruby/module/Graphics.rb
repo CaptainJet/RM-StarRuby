@@ -3,7 +3,7 @@ module Graphics
   class << self
     
     attr_reader :frame_rate, :brightness
-    attr_accessor :frame_count, :starruby
+    attr_accessor :frame_count, :starruby, :created_increment
     
     def frame_rate=(int)
       @frame_rate = [[120, int].min, 10].max
@@ -21,6 +21,7 @@ module Graphics
   
   def _reset
     @frame_count = 0
+    @created_increment = 0
     @@sprites.each {|a| a.bitmap.dispose; a.dispose }
     @@sprites.clear
   end
@@ -113,22 +114,5 @@ module Graphics
   end
   
   def resort_sprite_z
-    @@sprites.sort! do |a, b|
-      if !a.viewport.nil?
-        if !b.viewport.nil?
-          if a.viewport.z == b.viewport.z
-            a.z <=> b.z
-          else
-            a.viewport.z <=> b.viewport.z
-          end
-        else
-          a.viewport.z <=> b.z
-        end
-      elsif !b.viewport.nil?
-        a.z <=> b.viewport.z
-      else
-        a.z <=> b.z
-      end
-    end
   end
 end

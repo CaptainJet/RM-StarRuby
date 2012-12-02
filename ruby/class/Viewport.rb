@@ -1,7 +1,7 @@
 class Viewport
   
-  attr_reader :z
-  attr_accessor :color, :tone, :rect, :visible, :ox, :oy
+  attr_reader :z, :rect, :created_index
+  attr_accessor :color, :tone, :visible, :ox, :oy
   
   def initialize(*args)
     case args.size
@@ -18,18 +18,22 @@ class Viewport
     else
       raise ArgumentError
     end
+    @created_index = Graphics.created_increment
+    Graphics.created_increment += 1
+    @texture = StarRuby::Texture.new(@rect.width, @rect.height)
     @visible = true
     @z = 0
     @ox = 0
     @oy = 0
+    Graphics.add_sprite(self)
   end
   
   def dispose
-    @disposed = true
+    @texture.dispose
   end
   
   def disposed?
-    @disposed
+    @texture.disposed?
   end
   
   def flash(color, duration)
@@ -45,5 +49,10 @@ class Viewport
   def z=(z)
     @z = z
     Graphics.resort_sprite_z
+  end
+  
+  def rect=(rect)
+    @rect = rect
+    @texture = StarRuby::Texture.new(@rect.width, @rect.height)
   end
 end

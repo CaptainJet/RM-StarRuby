@@ -1,6 +1,6 @@
 class Sprite
   
-  attr_reader :opacity, :bush_opacity, :z, :viewport
+  attr_reader :opacity, :bush_opacity, :z, :viewport, :created_index
   attr_accessor :x, :y, :ox, :oy, :zoom_x, :zoom_y
   attr_accessor :src_rect, :bitmap, :visible
   attr_accessor :wave_amp, :wave_length, :wave_speed, :wave_phase
@@ -10,6 +10,8 @@ class Sprite
   BLEND = {0 => :none, 1 => :add, 2 => :sub}
   
   def initialize(viewport = nil)
+    @created_index = Graphics.created_increment
+    Graphics.created_increment += 1
     @viewport = viewport
     @visible = true
     @x, @y, @z = 0, 0, 0
