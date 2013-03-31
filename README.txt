@@ -11,4 +11,5 @@ Uses:
 Extra Credits:
 
 - Yeyinde (Table class)
+- Fomar0153 (Tilemap class)
 - Enterbrain (Maker of RPG Maker)

@@ -1,7 +1,7 @@
 Bitmap - blur, radial_blur
 Plane
 Sprite - update (wave phase), <color blendings>
-Tilemap
+Tilemap - implement shadows
 Window
 
 Audio - bgs/me functions
