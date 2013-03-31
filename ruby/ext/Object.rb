@@ -1,14 +1,12 @@
 class Object
   
   def rgss_main(&block)
-    loop { 
-      begin
-        block.call
-      rescue RGSSReset
-        Graphics._reset
-        retry
-      end
-    }
+    begin
+      block.call
+    rescue RGSSReset
+      Graphics._reset
+      retry
+    end
   end
   
   def rgss_stop

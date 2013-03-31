@@ -39,11 +39,15 @@ class Viewport
   def flash(color, duration)
     @flash_color = color || Color.new(0, 0, 0, 0)
     @flash_duration = duration
+    @texture.fill(StarRuby::Color.new(*@flash_color.to_a.collect {|a| a.round }))
   end
   
   def update
     @flash_duration = [@flash_duration - 1, 0].max
-    @flash_color = nil if @flash_duration == 0
+    if @flash_duration == 0 && !@flash_color.nil?
+      @flash_color = nil
+      @texture.clear
+    end
   end
   
   def z=(z)
@@ -54,5 +58,6 @@ class Viewport
   def rect=(rect)
     @rect = rect
     @texture = StarRuby::Texture.new(@rect.width, @rect.height)
+    @texture.fill(StarRuby::Color.new(*@flash_color.to_a.collect {|a| a.round })) if !@flash_color.nil?
   end
 end
