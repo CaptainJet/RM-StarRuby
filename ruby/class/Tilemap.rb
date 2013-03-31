@@ -1,12 +1,7 @@
-# Fomar0153's tilemap
 class Tilemap
-  #--------------------------------------------------------------------------
-  # * Constants
-  #--------------------------------------------------------------------------
+  
   TILESIZE = 32
-  #--------------------------------------------------------------------------
-  # * Public Instance Variables
-  #--------------------------------------------------------------------------
+
   attr_accessor :bitmaps
   attr_reader   :map_data
   attr_accessor :flash_data
@@ -15,9 +10,7 @@ class Tilemap
   attr_accessor :visible
   attr_reader   :ox
   attr_reader   :oy
-  #--------------------------------------------------------------------------
-  # * Object Initialization
-  #--------------------------------------------------------------------------
+  
   def initialize(viewport = nil)
     @bitmaps = []
     @viewport = viewport
@@ -35,9 +28,7 @@ class Tilemap
     @layers[2].z = 200
     @layers[2].viewport = @viewport
   end
-  #--------------------------------------------------------------------------
-  # * Free
-  #--------------------------------------------------------------------------
+
   def dispose
     for layer in @layers
       layer.bitmap.dispose
@@ -48,22 +39,16 @@ class Tilemap
     end
     @disposed = true
   end
-  #--------------------------------------------------------------------------
-  # * Checks if freed
-  #--------------------------------------------------------------------------
+
   def disposed?
     @disposed
   end
-  #--------------------------------------------------------------------------
-  # * Frame Update
-  #--------------------------------------------------------------------------
+  
   def update
     @anim_count = (@anim_count + 1) % (@animated_layer.size * 30)
     @layers[0].bitmap = @animated_layer[@anim_count/30]
   end
-  #--------------------------------------------------------------------------
-  # * Refresh
-  #--------------------------------------------------------------------------
+  
   def refresh
     return if @map_data.nil? || @flags.nil?
     for layer in @layers
@@ -72,9 +57,7 @@ class Tilemap
     draw_animated_layer
     draw_upper_layers
   end
-  #--------------------------------------------------------------------------
-  # * Draw Animated Layer
-  #--------------------------------------------------------------------------
+  
   def draw_animated_layer
     bitmap = Bitmap.new(@map_data.xsize * TILESIZE, @map_data.ysize * TILESIZE)
     if need_animated_layer?
@@ -92,30 +75,21 @@ class Tilemap
         draw_A5tile(x,y,@map_data[x,y,0]) if @map_data[x,y,0].between?(1536,1663)
       end
     end
-    
     for x in 0..@map_data.xsize - 1
       for y in 0..@map_data.ysize - 1
         draw_A1tile(x,y,@map_data[x,y,1],true) if @map_data[x,y,1].between?(2048,2815)
         draw_A2tile(x,y,@map_data[x,y,1]) if @map_data[x,y,1].between?(2816,4351)
-        
-        
       end
     end
-    
   end
   
-  #--------------------------------------------------------------------------
-  # * Draws A1 Tiles
-  #--------------------------------------------------------------------------
   def bitmap_for_autotile(autotile)
     return 0 if autotile.between?(0,15)
     return 1 if autotile.between?(16,47)
     return 2 if autotile.between?(48,79)
     return 3 if autotile.between?(80,127)
   end
-  #--------------------------------------------------------------------------
-  # * Draws A1 Tiles
-  #--------------------------------------------------------------------------
+  
   A1 = [
     [13,14,17,18], [2,14,17,18],  [13,3,17,18],  [2,3,17,18],
     [13,14,17,7],  [2,14,17,7],   [13,3,17,7],   [2,3,17,7],
@@ -130,12 +104,14 @@ class Tilemap
     [16,17,20,21], [16,3,20,21],  [8,11,12,15],  [8,9,20,21],
     [16,19,20,23], [10,11,22,23], [8,11,20,23],  [0,1,4,5]
   ]
+  
   A1POS = [
   [0,0],[0,TILESIZE*3],[TILESIZE*6,0],[TILESIZE*6,TILESIZE*3],
   [TILESIZE*8,0],[TILESIZE*14,0],[TILESIZE*8,TILESIZE*3],[TILESIZE*14,TILESIZE*3],
   [0,TILESIZE*6],[TILESIZE*6,TILESIZE*6],[0,TILESIZE*9],[TILESIZE*6,TILESIZE*9],
   [TILESIZE*8,TILESIZE*6],[TILESIZE*14,TILESIZE*6],[TILESIZE*8,TILESIZE*9],[TILESIZE*14,TILESIZE*9]
   ]
+  
   def draw_A1tile(x,y,id,animated = false)
     autotile = (id - 2048) / 48
     return draw_waterfalltile(x,y,id) if [5,7,9,11,13,15].include?(autotile)
@@ -154,9 +130,7 @@ class Tilemap
       x2 = (TILESIZE * 2) * ((autotile - 80) % 8)
       y2 = (TILESIZE * 3) * ((((autotile - 80) / 8)+1)/2) + (TILESIZE * 2) * (((autotile - 80) / 8)/2)
     end
-    
     rect = Rect.new(0,0,TILESIZE/2,TILESIZE/2)
-    
     for layer in @animated_layer
       for i in 0..3
         rect.x = x2 + (TILESIZE/2) * (A1[index][i] % 4)
@@ -175,20 +149,17 @@ class Tilemap
       x2 += TILESIZE * 2 if animated && ![2,3].include?(autotile)
     end
   end
-  #--------------------------------------------------------------------------
-  # * Draws Waterfall Tiles
-  #--------------------------------------------------------------------------
+  
   A1E = [
   [0,1,6,7],[0,1,4,5],[2,3,6,7],[1,2,5,6]
   ]
+  
   def draw_waterfalltile(x,y,id)
     autotile = (id - 2048) / 48
     index = (id - 2048) % 48
-      x2 = A1POS[autotile][0]
-      y2 = A1POS[autotile][1]
-    
+    x2 = A1POS[autotile][0]
+    y2 = A1POS[autotile][1]
     rect = Rect.new(0,0,TILESIZE/2,TILESIZE/2)
-    
     for layer in @animated_layer
       for i in 0..3
         rect.x = x2 + (TILESIZE/2) * (A1E[index][i] % 4)
@@ -207,21 +178,18 @@ class Tilemap
       y2 += TILESIZE
     end
   end
-  #--------------------------------------------------------------------------
-  # * Draws A2 Tiles
-  #--------------------------------------------------------------------------
+  
   def draw_A2tile(x,y,id)
     draw_A1tile(x,y,id)
   end
-  #--------------------------------------------------------------------------
-  # * Draws A3 Tiles
-  #--------------------------------------------------------------------------
+  
   A3 = [
     [5,6,9,10],    [4,5,8,9],    [1,2,5,6],   [0,1,4,5],
     [6,7,10,11],   [4,7,8,11],   [2,3,6,7],   [0,3,4,7],
     [9,10,13,14],  [8,9,12,13],  [1,2,13,14], [0,1,12,13],
     [10,11,14,15], [8,11,12,13], [2,3,14,15], [0,3,12,15]
-    ]
+  ]
+  
   def draw_A3tile(x,y,id)
     autotile = (id - 2048) / 48
     index = (id - 2048) % 48
@@ -239,9 +207,7 @@ class Tilemap
       x2 = (TILESIZE * 2) * ((autotile - 80) % 8)
       y2 = (TILESIZE * 3) * ((((autotile - 80) / 8)+1)/2) + (TILESIZE * 2) * (((autotile - 80) / 8)/2)
     end
-    
     rect = Rect.new(0,0,TILESIZE/2,TILESIZE/2)
-    
     for layer in @animated_layer
       for i in 0..3
         if A3[index].nil?
@@ -264,9 +230,7 @@ class Tilemap
       end
     end
   end
-  #--------------------------------------------------------------------------
-  # * Draws A4 Tiles
-  #--------------------------------------------------------------------------
+  
   def draw_A4tile(x,y,id)
     autotile = (id - 2048) / 48
     case autotile
@@ -280,9 +244,7 @@ class Tilemap
       draw_A3tile(x,y,id)
     end
   end
-  #--------------------------------------------------------------------------
-  # * Draws A5 Tiles
-  #--------------------------------------------------------------------------
+  
   def draw_A5tile(x,y,id)
     id -= 1536
     rect = Rect.new(TILESIZE * (id % 8),TILESIZE * ((id % 128) / 8),TILESIZE,TILESIZE)
@@ -290,9 +252,7 @@ class Tilemap
       layer.blt(x * TILESIZE, y * TILESIZE,@bitmaps[4],rect)
     end
   end
-  #--------------------------------------------------------------------------
-  # * Check if animated layer needed
-  #--------------------------------------------------------------------------
+  
   def need_animated_layer?
     for x in 0..@map_data.xsize - 1
       for y in 0..@map_data.ysize - 1
@@ -303,9 +263,7 @@ class Tilemap
     end
     return false
   end
-  #--------------------------------------------------------------------------
-  # * Draw Upper Layers
-  #--------------------------------------------------------------------------
+  
   def draw_upper_layers
     bitmap = Bitmap.new(@map_data.xsize * TILESIZE, @map_data.ysize * TILESIZE)
     @layers[1].bitmap = bitmap
@@ -324,38 +282,25 @@ class Tilemap
       end
     end
   end
-  #--------------------------------------------------------------------------
-  # * Set Map Data
-  #--------------------------------------------------------------------------
+  
   def map_data=(data)
     return if @map_data == data
     @map_data = data
-    for x in 0..@map_data.xsize - 1
-      for y in 0..@map_data.ysize - 1
-        #p @map_data[x,y,2]
-      end
-    end
     refresh
   end
-  #--------------------------------------------------------------------------
-  # * Set Map Data
-  #--------------------------------------------------------------------------
+  
   def flags=(data)
     @flags = data
     refresh
   end
-  #--------------------------------------------------------------------------
-  # * Set ox
-  #--------------------------------------------------------------------------
+  
   def ox=(value)
     @ox = value
     for layer in @layers
       layer.ox = @ox
     end
   end
-  #--------------------------------------------------------------------------
-  # * Set oy
-  #--------------------------------------------------------------------------
+  
   def oy=(value)
     @oy = value
     for layer in @layers

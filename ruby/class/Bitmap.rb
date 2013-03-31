@@ -130,6 +130,23 @@ class Bitmap
   end
   
   def blur
+    height.times {|h|
+      width.times {|w|
+        pix = @texture[w, h]
+        pix2 = (w - 1).between?(0, width - 1) ? @texture[w - 1, h] : nil
+        pix3 = (h - 1).between?(0, height - 1) ? @texture[w, h - 1] : nil 
+        @texture[w, h] = pix.interpolate(pix2, 128).interpolate(pix3, 128)
+      }
+    }
+    height.times {|h|
+      h = height - h - 1
+      width.times {|w|
+        pix = @texture[w, h]
+        pix2 = (w + 1).between?(0, width - 1) ? @texture[w + 1, h] : nil
+        pix3 = (h + 1).between?(0, height - 1) ? @texture[w, h + 1] : nil 
+        @texture[w, h] = pix.interpolate(pix2, 128).interpolate(pix3, 128)
+      }
+    }
   end
   
   def radial_blur(angle, division)
