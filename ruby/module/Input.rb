@@ -31,23 +31,23 @@ module Input
   end
   
   def trigger?(key)
-    (key.is_a?(Array) ? key : self.const_get(key)).each {|a|
+    (key.is_a?(Array) ? key : self.const_get(key)).each do |a|
       return true if @current_keys.include?(a) && !@old_keys.include?(a)
-    }
+    end
     return false
   end
   
   def press?(key)
-   (key.is_a?(Array) ? key : self.const_get(key)).each {|a|
+   (key.is_a?(Array) ? key : self.const_get(key)).each do |a|
       return true if @current_keys.include?(a)
-    }
+    end
     return false
   end
   
   def repeat?(key)
-    (key.is_a?(Array) ? key : self.const_get(key)).each {|a|
+    (key.is_a?(Array) ? key : self.const_get(key)).each do |a|
       return true if @repeat_keys.include?(a)
-    }
+    end
     return false
   end
   

@@ -10,19 +10,21 @@ class Object
   end
   
   def rgss_stop
-    loop { Graphics.update }
+    loop do 
+      Graphics.update
+    end
   end
   
   def load_data(filename)
-    File.open(filename, "rb") { |f|
+    File.open(filename, "rb") do |f|
       obj = Marshal.load(f)
-    }
+    end
   end
   
   def save_data(obj, filename)
-    File.open(filename, "wb") { |f|
+    File.open(filename, "wb") do |f|
       Marshal.dump(obj, f)
-    }
+    end
   end
   
   def msgbox(*args)

@@ -22,7 +22,10 @@ module Graphics
   def _reset
     @frame_count = 0
     @created_increment = 0
-    @@sprites.each {|a| a.bitmap.dispose; a.dispose }
+    @@sprites.each do |a| 
+      a.bitmap.dispose
+      a.dispose
+    end
     @@sprites.clear
   end
   
@@ -39,7 +42,9 @@ module Graphics
   end
   
   def wait(duration)
-    duration.times { update }
+    duration.times do
+      update
+    end
   end
   
   def fadeout(duration)
@@ -114,5 +119,26 @@ module Graphics
   end
   
   def resort_sprite_z
+    @@sprites.sort! do |a, b|
+      if (a.is_a?(Viewport) ? a.z : a.viewport ? a.viewport.z : a.z) == (b.is_a?(Viewport) ? b.z : b.viewport ? b.viewport.z : b.z)
+        if a.is_a?(Sprite) && b.is_a?(Sprite)
+          if a.z == b.z
+            if a.y == b.y && a.viewport == b.viewport
+              a.created_increment <=> b.created_increment
+            elsif a.viewport == b.viewport
+              a.y <=> b.y
+            else
+              a.created_increment <=> b.created_increment
+            end
+          else
+            a.z <=> b.z
+          end
+        else
+          a.created_increment <=> b.created_increment
+        end
+      else
+        (a.is_a?(Viewport) ? a.z : a.viewport ? a.viewport.z : a.z) <=> (b.is_a?(Viewport) ? b.z : b.viewport ? b.viewport.z : b.z)
+      end
+    end
   end
 end

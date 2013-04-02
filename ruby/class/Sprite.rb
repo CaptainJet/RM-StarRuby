@@ -1,8 +1,8 @@
 class Sprite
   
-  attr_reader :opacity, :bush_opacity, :z, :viewport, :created_index
+  attr_reader :opacity, :bush_opacity, :z, :viewport, :created_index, :src_rect, :texture
   attr_accessor :x, :y, :ox, :oy, :zoom_x, :zoom_y
-  attr_accessor :src_rect, :bitmap, :visible
+  attr_accessor , :bitmap, :visible
   attr_accessor :wave_amp, :wave_length, :wave_speed, :wave_phase
   attr_accessor :angle, :mirror, :color, :tone, :blend_type
   attr_accessor :bush_depth
@@ -26,6 +26,7 @@ class Sprite
     @wave_speed = 360
     @src_rect = Rect.new
     Graphics.add_sprite(self)
+    refresh_texture
   end
   
   def initialize_copy
@@ -80,8 +81,24 @@ class Sprite
     Graphics.resort_sprite_z
   end
   
+  def src_rect=(src_rect)
+    @src_rect = src_rect
+    refresh_texture
+  end
+  
   def z=(z)
     @z = z
     Graphics.resort_sprite_z
+  end
+  
+  private
+  
+  def refresh_texture
+    if @bitmap.nil?
+      @texture = StarRuby::Texture.new(@src_rect.width, @src_rect.height)
+      return
+    end
+    @texture = @bitmap.texture.dup
+    @texture.render_rect(0, 0, @texture.width, @texture.height, StarRuby::Color.new(*@color.to_a.collect {|a| a.round })) if @color
   end
 end

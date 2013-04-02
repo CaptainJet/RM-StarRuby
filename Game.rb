@@ -1,5 +1,9 @@
-Dir["./so/**/*.so"].each {|a| require a }
-Dir["./ruby/**/*.rb"].each {|a| require a }
+Dir["./so/**/*.so"].each do |a|
+  require a
+end
+Dir["./ruby/**/*.rb"].each do |a|
+  require a
+end
 
 module StarRuby
   

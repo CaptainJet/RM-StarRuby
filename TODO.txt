@@ -1,5 +1,5 @@
 Bitmap - radial_blur
-Sprite - update (wave phase), <color blendings>
+Sprite - update (wave phase)
 Tilemap - implement shadows
 Window
 
