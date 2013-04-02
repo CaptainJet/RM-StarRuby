@@ -90,3 +90,4 @@ class Plane
     end
     @texture.render_rect(0, 0, @texture.width, @texture.height, StarRuby::Color.new(*@color.to_a.collect {|a| a.round })) if @color
   end
+end
