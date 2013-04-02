@@ -27,6 +27,7 @@ class Plane
   def viewport=(viewport)
     @viewport = viewport
     Graphics.resort_sprite_z
+    refresh_texture
   end
   
   def z=(z)
@@ -72,7 +73,7 @@ class Plane
   
   def refresh_texture
     if @bitmap.nil?
-      @texture.clear
+      @texture = StarRuby::Texture.new(viewport ? viewport.rect.width : Graphics.width, viewport ? viewport.rect.height : Graphics.height)
       return
     end
     wx = @bitmap.width * @zoom_x
