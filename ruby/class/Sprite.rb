@@ -24,7 +24,7 @@ class Sprite
     @opacity = 255
     @blend_type = 0
     @wave_speed = 360
-    @src_rect = Rect.new(0, 0, 0, 0)
+    @src_rect = Rect.new
     Graphics.add_sprite(self)
   end
   
