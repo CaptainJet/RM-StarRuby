@@ -1,6 +1,6 @@
 Bitmap - radial_blur
 Sprite - update (wave phase)
-Tilemap - implement shadows
+Tilemap - implement shadows, flash_data implementation
 Window
 
 Audio - bgs/me functions

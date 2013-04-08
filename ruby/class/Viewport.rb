@@ -20,10 +20,17 @@ class Viewport
     end
     @created_index = Graphics.created_increment
     Graphics.created_increment += 1
+    Graphics.add_sprite(self)
     @visible = true
     @z = 0
     @ox = 0
     @oy = 0
+  end
+  
+  def initialize_copy
+    f = super
+    Graphics.add_sprite(f)
+    f
   end
   
   def dispose
@@ -47,5 +54,9 @@ class Viewport
   def z=(z)
     @z = z
     Graphics.resort_sprite_z
+  end
+  
+  def actual_color
+    @flash_color || @color
   end
 end

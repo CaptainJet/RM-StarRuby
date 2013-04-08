@@ -7,7 +7,7 @@ class Sprite
   attr_accessor :angle, :mirror, :color, :tone, :blend_type
   attr_accessor :bush_depth
   
-  BLEND = {0 => :none, 1 => :add, 2 => :sub}
+  BLEND = {0 => :alpha, 1 => :add, 2 => :sub}
   
   def initialize(viewport = nil)
     @created_index = Graphics.created_increment
@@ -99,6 +99,6 @@ class Sprite
       return
     end
     @texture = @bitmap.texture.dup
-    @texture.render_rect(0, 0, @texture.width, @texture.height, StarRuby::Color.new(*@color.to_a.collect {|a| a.round })) if @color
+    @texture.render_rect(0, 0, @texture.width, @texture.height, @color.starruby_color) if @color
   end
 end

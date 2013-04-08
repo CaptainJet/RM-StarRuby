@@ -5,6 +5,8 @@ Dir["./ruby/**/*.rb"].each do |a|
   require a
 end
 
+require 'profile'
+
 module StarRuby
   
   CONFIG = {

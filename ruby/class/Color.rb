@@ -1,6 +1,6 @@
 class Color
   
-  attr_reader :red, :green, :blue, :alpha
+  attr_reader :red, :green, :blue, :alpha, :starruby_color
   
   def initialize(*args)
     case args.size
@@ -60,6 +60,18 @@ class Color
   
   def to_a
     [red, green, blue, alpha]
+  end
+  
+  def starruby_color
+    @old_struct ||= Struct.new(:red, :green, :blue, :alpha, :color).new(0, 0, 0, 0, 0)
+    if @old_struct.red != self.red || @old_struct.green != self.green || @old_struct.blue != self.blue || @old_struct.alpha != self.alpha
+      @old_struct.red = self.red
+      @old_struct.green = self.green
+      @old_struct.blue = self.blue
+      @old_struct.alpha = self.alpha
+      @old_struct.color = StarRuby::Color.new(*self.to_a.collect {|a| a.round })
+    end
+    @old_struct.color
   end
   
   def _dump(d = 0)

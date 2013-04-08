@@ -1,11 +1,12 @@
 class Plane
   
-  attr_reader :created_index, :viewport, :z, :opacity, :color, :bitmap, :ox, :oy, :zoom_x, :zoom_y
-  attr_accessor :blend_type, :tone, :visible
+  attr_reader :created_index, :viewport, :z, :opacity, :color, :bitmap, :ox, :oy
+  attr_accessor :blend_type, :tone, :visible, :zoom_x, :zoom_y
   
   def initialize(viewport = nil)
     @created_index = Graphics.created_increment
     Graphics.created_increment += 1
+    Graphics.add_sprite(self)
     @visible = true
     @z = 0
     @ox, @oy = 0, 0
@@ -14,6 +15,12 @@ class Plane
     @blend_type = 0
     @viewport = viewport
     refresh_texture
+  end
+  
+  def initialize_copy
+    f = super
+    Graphics.add_sprite(f)
+    f
   end
   
   def dispose
@@ -59,16 +66,6 @@ class Plane
     refresh_texture
   end
   
-  def zoom_x=(zoom_x)
-    @zoom_x = zoom_x
-    refresh_texture
-  end
-  
-  def zoom_y=(zoom_y)
-    @zoom_y = zoom_y
-    refresh_texture
-  end
-  
   private
   
   def refresh_texture
@@ -76,18 +73,18 @@ class Plane
       @texture = StarRuby::Texture.new(viewport ? viewport.rect.width : Graphics.width, viewport ? viewport.rect.height : Graphics.height)
       return
     end
-    wx = @bitmap.width * @zoom_x
-    wy = @bitmap.height * @zoom_y
-    sx = @ox
-    sy = @oy
+    wx = @bitmap.width
+    wy = @bitmap.height
+    sx = -@ox
+    sy = -@oy
     @texture = StarRuby::Texture.new(viewport ? viewport.rect.width : Graphics.width, viewport ? viewport.rect.height : Graphics.height)
     until sx >= @texture.width
       until sy >= @texture.height
-        @texture.render_texture(@bitmap.texture, sx, sy, :scale_x => @zoom_x, :scale_y => @zoom_y)
+        @texture.render_texture(@bitmap.texture, sx, sy)
         sy += wy
       end
       sx += wx
     end
-    @texture.render_rect(0, 0, @texture.width, @texture.height, StarRuby::Color.new(*@color.to_a.collect {|a| a.round })) if @color
+    @texture.render_rect(0, 0, @texture.width, @texture.height, @color.starruby_color) if @color
   end
 end

@@ -51,7 +51,7 @@ class Bitmap
     else
       raise ArgumentError
     end
-    @texture.fill_rect(x, y, width, height, StarRuby::Color.new(*color.to_a.collect {|a| a.round }))
+    @texture.fill_rect(x, y, width, height, color.starruby_color)
   end
   
   def gradient_fill_rect(*args)
@@ -122,7 +122,7 @@ class Bitmap
   end
   
   def set_pixel(x, y, color)
-    @texture[x, y] = StarRuby::Color.new(*color.to_a.collect {|a| a.round })
+    @texture[x, y] = color.starruby_color
   end
   
   def hue_change(hue)
