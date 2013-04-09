@@ -1,9 +1,9 @@
 Bitmap - radial_blur
 Sprite - update (wave phase)
 Tilemap - implement shadows, flash_data implementation
-Window
+Window - update, setup_background_overlay, setup_border, setup_cursor, setup_arrows
 
 Audio - bgs/me functions
-Graphics - transition, frame_reset, play_movie, update (drawing)
+Graphics - transition, frame_reset, play_movie, update (drawing) <Still iffy on resort_sprite_z>
 
 Object - msgbox, msgbox_p

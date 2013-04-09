@@ -43,4 +43,4 @@ $RGSS_SCRIPTS = load_data("Data/Scripts.rvdata2")
 #~ $RGSS_SCRIPTS.each {|a|
   #~ eval(Zlib::Inflate.inflate(a[2]))
 #~ }
-loop { Input.update; Graphics.update }
+rgss_main { loop { Input.update; Graphics.update } }

@@ -28,6 +28,7 @@ module Input
     @old_keys = @current_keys || []
     @current_keys = StarRuby::Input.keys(:keyboard)
     @repeat_keys = StarRuby::Input.keys(:keyboard, :delay => 5, :duration => 1, :interval => 5)
+    raise RGSSReset if @current_keys.include?(:f12) && !@old_keys.include?(:f12)
   end
   
   def trigger?(key)
