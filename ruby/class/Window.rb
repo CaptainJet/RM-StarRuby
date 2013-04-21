@@ -22,6 +22,7 @@ class Window
     @sprites = {
       :contents => Sprite.new,
       :back => Sprite.new,
+      :back_overlay => Sprite.new,
       :border => Sprite.new,
       :arrow_left => Sprite.new,
       :arrow_up => Sprite.new,
@@ -46,9 +47,9 @@ class Window
   end
   
   def move(x, y, width, height)
-    self.x = x
-    self.y = y
-    self.width = width
+    @x = x
+    @y = y
+    @width = width
     self.height = height
   end
   
@@ -124,10 +125,26 @@ class Window
     Graphics.remove_sprite(@sprites[:back])
     bitm = Bitmap.new(128, 128)
     @sprites[:back].bitmap = bitm
-    bitm.stretch_blt(Rect.new(0, 0, @width, @height), @windowskin, Rect.new(0, 0, 128, 64), 255)
+    bitm.stretch_blt(Rect.new(0, 0, @width, @height), @windowskin, Rect.new(0, 0, 64, 64))
   end
   
   def setup_background_overlay
+    @sprites[:back_overlay].bitmap.dispose
+    @sprites[:back_overlay].dispose
+    @sprites[:back_overlay] = Sprite.new
+    Graphics.remove_sprite(@sprites[:back_overlay])
+    bitm = Bitmap.new(@width, @height)
+    @sprites[:back_overlay].bitmap = bitm
+    src_rect = Rect.new(0, 64, 64, 64)
+    sx = 0
+    until sx >= @width
+      sy = 0
+      until sy >= @height
+        @sprites[:back_overlay].bitmap.blt(sx, sy, @windowskin, src_rect)
+        sy += 128
+      end
+      sx += 128
+    end
   end
   
   def setup_arrows

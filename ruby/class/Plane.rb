@@ -76,9 +76,9 @@ class Plane
     wx = @bitmap.width
     wy = @bitmap.height
     sx = -@ox
-    sy = -@oy
     @texture = StarRuby::Texture.new(viewport ? viewport.rect.width : Graphics.width, viewport ? viewport.rect.height : Graphics.height)
     until sx >= @texture.width
+      sy = -@oy
       until sy >= @texture.height
         @texture.render_texture(@bitmap.texture, sx, sy)
         sy += wy
