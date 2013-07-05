@@ -1,6 +1,6 @@
 HIGH PRIORITY
 
-Window - update, setup_border, setup_cursor, setup_arrows
+Window - setup_border, setup_cursor
 Graphics - update (drawing)
 
 MID PRIORITY

@@ -69,7 +69,7 @@ class Color
       @old_struct.green = self.green
       @old_struct.blue = self.blue
       @old_struct.alpha = self.alpha
-      @old_struct.color = StarRuby::Color.new(*self.to_a.collect {|a| a.round })
+      @old_struct.color = StarRuby::Color.new(*self.to_a.collect do |a| a.round end)
     end
     @old_struct.color
   end

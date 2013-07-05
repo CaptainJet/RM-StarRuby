@@ -15,3 +15,4 @@ Extra Credits:
 - Fomar0153 (Tilemap class)
 - Willem van Bergen (StarRuby::Color#int8_mult and #interpolate)
 - Enterbrain (Maker of RPG Maker)
+- IceDragon (Window#update)

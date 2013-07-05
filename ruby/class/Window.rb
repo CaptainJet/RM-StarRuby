@@ -34,8 +34,29 @@ class Window
       :pause_four => Sprite.new,
       :cursor => Sprite.new
     }
-    @sprites.values.each {|a| Graphics.remove_sprite(a); a.bitmap = Bitmap.new(1, 1) }
+    @cursor_ticks = 0
+    @pause_ticks = 0
+    @sprites.values.each do |a|
+      Graphics.remove_sprite(a); a.bitmap = Bitmap.new(1, 1)
+    end
     Graphics.add_sprite(self)
+  end
+  
+  def update
+    if @active
+      @cursor_ticks += 1
+      if @cursor_ticks % 30 < 15
+        @sprites[:cursor].opacity = 128 + 128 * (@cursor_ticks % 15) / 15.0
+      else
+        @sprites[:cursor].opacity = 255 - 128 * (@cursor_ticks % 15) / 15.0
+      end
+      @cursor_ticks = 0 if @cursor_ticks == 30
+    end
+    if @pause
+      @pause_ticks += 1
+      @pause_index = [:pause_one, :pause_two, :pause_three, :pause_four][(@pause_ticks / 15) % 4]
+      @pause_ticks = 0 if @pause_ticks == 60
+    end
   end
   
   def open?
@@ -70,9 +91,9 @@ class Window
   
   def opacity=(int)
     @opacity = int
-    @sprites.values.each {|a|
+    @sprites.values.each do |a|
       a.opacity = int
-    }
+    end
     @sprites[:back_opacity].opacity = @back_opacity
     @sprites[:contents].opacity = @contents_opacity
     @sprites[:cursor].opacity = 255
@@ -148,18 +169,25 @@ class Window
   end
   
   def setup_arrows
+    [:arrow_up, :arrow_down, :arrow_left, :arrow_right].each do |a|
+      @sprites[a].bitmap.dispose
+      @sprites[a].bitmap = Bitmap.new(16, 16)
+    end
+    @sprites[:arrow_up].blt(0, 0, @windowskin, Rect.new(80 + 8, 16, 16, 8))
+    @sprites[:arrow_down].blt(0, 0, @windowskin, Rect.new(80 + 8, 16 + 16 + 8, 16, 8))
+    @sprites[:arrow_left].blt(0, 0, @windowskin, Rect.new(80, 16 + 8, 8, 16))
+    @sprites[:arrow_right].blt(0, 0, @windowskin, Rect.new(80 + 16 + 8, 16 + 8, 8, 16))
   end
   
   def setup_pauses
-    [:pause_one, :pause_two, :pause_three, :pause_four].each {|a|
+    [:pause_one, :pause_two, :pause_three, :pause_four].each do |a|
       @sprites[a].bitmap.dispose
-      @sprites[a].bitmap = Bitmap.new(8, 8)
-    }
-    x = @windowskin.width - 32
-    @sprites[:pause_one].blt(0, 0, @windowskin, Rect.new(x, 64, 8, 8))
-    @sprites[:pause_two].blt(0, 0, @windowskin, Rect.new(x + 8, 64, 8, 8))
-    @sprites[:pause_three].blt(0, 0, @windowskin, Rect.new(x, 72, 8, 8))
-    @sprites[:pause_four].blt(0, 0, @windowskin, Rect.new(x + 8, 72, 8, 8))
+      @sprites[a].bitmap = Bitmap.new(16, 16)
+    end
+    @sprites[:pause_one].blt(0, 0, @windowskin, Rect.new(96, 64, 16, 16))
+    @sprites[:pause_two].blt(0, 0, @windowskin, Rect.new(96 + 16, 64, 16, 16))
+    @sprites[:pause_three].blt(0, 0, @windowskin, Rect.new(96, 80, 16, 16))
+    @sprites[:pause_four].blt(0, 0, @windowskin, Rect.new(96 + 16, 80, 16, 16))
   end
   
   def setup_border
